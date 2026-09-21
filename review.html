@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#100f0d">
+  <meta name="description" content="Eucalyptus — Reviews and reflections.">
+  <title>Reviews — Eucalyptus</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body.review-page {
+      min-height: 100svh;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(215,183,123,.07), transparent 34%),
+        var(--black);
+    }
+    .reviews-page {
+      width: min(100%, 920px);
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+    .reviews-page-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,.09);
+      background: rgba(16,15,13,.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .reviews-page-title {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: .01em;
+    }
+    .reviews-page-add {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(236,212,159,.42);
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ead4a5, #c9a86c);
+      color: #17130d;
+      font-size: 25px;
+      line-height: 1;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+      transition: transform .2s ease;
+    }
+    .reviews-page-add:hover { transform: translateY(-2px); }
+    .reviews-intro {
+      padding: 54px 0 34px;
+      text-align: center;
+    }
+    .reviews-intro-kicker {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: 10px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+    }
+    .reviews-intro h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(40px, 7vw, 64px);
+      font-weight: 400;
+    }
+    .reviews-intro p {
+      max-width: 570px;
+      margin: 15px auto 0;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.75;
+      font-size: 14px;
+    }
+    .all-reviews-list {
+      display: grid;
+      gap: 14px;
+    }
+    .all-reviews-list .review-card {
+      animation: reviewAppear .35s ease both;
+    }
+    @keyframes reviewAppear {
+      from { opacity: 0; transform: translateY(7px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reviews-page-state {
+      min-height: 180px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      text-align: center;
+      border: 1px solid rgba(215,183,123,.12);
+      background: rgba(255,255,255,.015);
+    }
+    .reviews-back {
+      display: block;
+      width: fit-content;
+      margin: 32px auto 0;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .reviews-back:hover { color: var(--gold-light); }
+    @media (max-width: 700px) {
+      .reviews-page { padding: 0 14px 55px; }
+      .reviews-page-header { height: 64px; }
+      .reviews-page-title { font-size: 24px; }
+      .reviews-page-add { width: 40px; height: 40px; }
+      .reviews-intro { padding: 42px 8px 28px; }
+      .reviews-intro h1 { font-size: 43px; }
+      .reviews-intro p { font-size: 13px; }
+    }
+  </style>
+</head>
+<body class="review-page">
+  <main class="reviews-page">
+    <header class="reviews-page-header">
+      <h1 class="reviews-page-title">Reviews</h1>
+      <button class="reviews-page-add" id="pageAddReview" type="button" aria-label="Add review">+</button>
+    </header>
+
+    <section class="reviews-intro">
+      <p class="reviews-intro-kicker">Reflections</p>
+      <h2>Words from our readers</h2>
+      <p>Every reflection is a small part of the Eucalyptus journey.</p>
+    </section>
+
+    <section aria-label="All reviews">
+      <div id="allReviewsList" class="all-reviews-list">
+        <div class="reviews-page-state">
+          <span><span class="inline-spinner" aria-hidden="true"></span>&nbsp; Loading reflections…</span>
+        </div>
+      </div>
+    </section>
+
+    <a class="reviews-back" href="index.html">← Back to Eucalyptus</a>
+  </main>
+
+  <!-- Reuse the existing review form/modal exactly, without changing the homepage form. -->
+  <div class="modal" id="reviewModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-review></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="reviewTitle">
+      <button class="modal-close" id="closeReview" type="button" aria-label="Close">×</button>
+      <div class="modal-ornament">✦</div>
+      <h2 id="reviewTitle">Share your thoughts</h2>
+      <p class="modal-intro">Tell us what you felt while going through Eucalyptus.</p>
+      <div class="review-submit-overlay" id="reviewSubmitOverlay" aria-hidden="true">
+        <div class="submit-spinner" aria-hidden="true"></div>
+        <strong id="reviewSubmitTitle">Publishing your reflection…</strong>
+        <span id="reviewSubmitText">Please wait a moment.</span>
+      </div>
+      <form id="reviewForm">
+        <label>Name
+          <input name="name" type="text" maxlength="60" required placeholder="Your name">
+        </label>
+        <label>Rating
+          <span class="rating-input" id="ratingInput">
+            <button type="button" data-rating="1">★</button>
+            <button type="button" data-rating="2">★</button>
+            <button type="button" data-rating="3">★</button>
+            <button type="button" data-rating="4">★</button>
+            <button type="button" data-rating="5">★</button>
+          </span>
+          <input id="ratingValue" name="rating" type="hidden" value="5">
+        </label>
+        <label>Your review
+          <textarea name="review" maxlength="600" rows="5" required placeholder="Write something about the magazine…"></textarea>
+        </label>
+        <button class="submit-review" type="submit">Publish review</button>
+        <p class="form-message" id="formMessage"></p>
+      </form>
+    </div>
+  </div>
+
+<script>
+const REVIEW_API_URL = "https://script.google.com/macros/s/AKfycbyBRiG2zSJiflltSO2iUaeSy_tyiNYF7ASCsY05XhcqAOAndD3G_vsc6mHWqaaKgOG7/exec";
+const REVIEW_CACHE_KEY = "eucalyptus_reviews_v1";
+
+const modal = document.getElementById("reviewModal");
+const form = document.getElementById("reviewForm");
+const list = document.getElementById("allReviewsList");
+const ratingValue = document.getElementById("ratingValue");
+const submitButton = form.querySelector(".submit-review");
+const overlay = document.getElementById("reviewSubmitOverlay");
+
+function sortLatest(reviews) {
+  return [...reviews].sort((a,b) => {
+    const da = new Date(a.date || 0).getTime();
+    const db = new Date(b.date || 0).getTime();
+    return (Number.isFinite(db) ? db : 0) - (Number.isFinite(da) ? da : 0);
+  });
+}
+function card(review) {
+  const el = document.createElement("article");
+  el.className = "review-card";
+  const top = document.createElement("div");
+  top.className = "review-top";
+  const name = document.createElement("div");
+  name.className = "review-name";
+  name.textContent = review.name || "Anonymous";
+  const stars = document.createElement("div");
+  stars.className = "review-stars";
+  const rating = Math.max(0, Math.min(5, Number(review.rating) || 0));
+  stars.textContent = "★".repeat(rating) + "☆".repeat(5-rating);
+  const text = document.createElement("p");
+  text.className = "review-text";
+  text.textContent = review.review || "";
+  top.append(name, stars);
+  el.append(top, text);
+  return el;
+}
+function render(reviews) {
+  list.innerHTML = "";
+  const sorted = sortLatest(reviews);
+  if (!sorted.length) {
+    list.innerHTML = '<div class="reviews-page-state">Be the first to leave a reflection.</div>';
+    return;
+  }
+  sorted.forEach((r,i) => {
+    const el = card(r);
+    el.style.animationDelay = Math.min(i * 35, 280) + "ms";
+    list.appendChild(el);
+  });
+}
+function getCache() {
+  try { return JSON.parse(sessionStorage.getItem(REVIEW_CACHE_KEY) || "null"); } catch (_) { return null; }
+}
+function setCache(v) {
+  try { sessionStorage.setItem(REVIEW_CACHE_KEY, JSON.stringify(v)); } catch (_) {}
+}
+async function loadReviews() {
+  const cached = getCache();
+  if (Array.isArray(cached)) render(cached);
+  try {
+    const response = await fetch(REVIEW_API_URL + "?t=" + Date.now(), {cache:"no-store"});
+    if (!response.ok) throw new Error();
+    const data = await response.json();
+    const reviews = Array.isArray(data.reviews) ? data.reviews : [];
+    setCache(reviews);
+    render(reviews);
+  } catch (_) {
+    if (!Array.isArray(cached)) {
+      list.innerHTML = '<div class="reviews-page-state">Reflections are temporarily unavailable.</div>';
+    }
+  }
+}
+function openReview() {
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden","false");
+}
+function closeReview() {
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden","true");
+}
+document.getElementById("pageAddReview").addEventListener("click", openReview);
+document.getElementById("closeReview").addEventListener("click", closeReview);
+document.querySelector("[data-close-review]").addEventListener("click", closeReview);
+
+document.querySelectorAll("#ratingInput button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const value = Number(btn.dataset.rating);
+    ratingValue.value = value;
+    document.querySelectorAll("#ratingInput button").forEach((star,i) => star.textContent = i < value ? "★" : "☆");
+  });
+});
+
+function setSubmitting(on) {
+  // The old full-card overlay is intentionally disabled. The homepage
+  // uses a compact one-line publishing state instead.
+  overlay.classList.remove("open");
+  overlay.setAttribute("aria-hidden", "true");
+  submitButton.disabled = on;
+  form.querySelectorAll("input, textarea, #ratingInput button").forEach(x => x.disabled = on);
+}
+
+function showPublishState(message = "Publishing your reflection…", success = false) {
+  list.innerHTML = `
+    <div class="reviews-page-state review-publish-state ${success ? "is-success" : ""}">
+      ${success ? "" : '<span class="inline-spinner" aria-hidden="true"></span>'}
+      <span>${message}</span>
+    </div>
+  `;
+}
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  if (submitButton.disabled) return;
+  document.getElementById("formMessage").textContent = "";
+  const fd = new FormData(form);
+  const payload = {
+    name: String(fd.get("name") || "").trim(),
+    rating: Number(fd.get("rating") || 5),
+    review: String(fd.get("review") || "").trim()
+  };
+  if (!payload.name || !payload.review) {
+    document.getElementById("formMessage").textContent = "Please complete the form.";
+    return;
+  }
+
+  setSubmitting(true);
+  closeReview();
+  showPublishState();
+
+  try {
+    await fetch(REVIEW_API_URL, {
+      method:"POST", mode:"no-cors",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify(payload)
+    });
+
+    try { sessionStorage.removeItem(REVIEW_CACHE_KEY); } catch (_) {}
+    form.reset();
+    ratingValue.value = 5;
+    document.querySelectorAll("#ratingInput button").forEach(star => star.textContent = "★");
+
+    showPublishState("Reflection submitted", true);
+    await new Promise(r => setTimeout(r, 650));
+    setSubmitting(false);
+    loadReviews();
+  } catch (_) {
+    setSubmitting(false);
+    showPublishState("Could not publish. Please try again.", true);
+    setTimeout(loadReviews, 1400);
+  }
+});
+
+// Prevent selection, long-press selection and the context menu outside the review form.
+document.addEventListener("selectstart", e => {
+  if (!e.target.closest("#reviewForm")) e.preventDefault();
+});
+document.addEventListener("contextmenu", e => {
+  if (!e.target.closest("#reviewForm")) e.preventDefault();
+});
+document.addEventListener("dragstart", e => {
+  if (!e.target.closest("#reviewForm")) e.preventDefault();
+});
+loadReviews();
+  } catch (_) {
+    setSubmitting(false, "Could not publish");
+    document.getElementById("formMessage").textContent = "Could not submit the review. Please try again.";
+  }
+});
+loadReviews();
+</script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#100f0d">
+  <meta name="description" content="Eucalyptus — First Edition. A tribute to Zubeen Garg.">
+  <title>Eucalyptus — First Edition</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://script.google.com">
+  <link rel="preconnect" href="https://script.googleusercontent.com">
+</head>
+<body>
+
+  <!-- =========================
+       HOMEPAGE
+  ========================== -->
+  <section class="home" id="home">
+
+    <div class="tribute-frame" aria-hidden="true">
+
+      <div class="home-photo">
+        <img src="assets/zubeen.jpg" alt="Zubeen Garg">
+      </div>
+    </div>
+
+    <div class="home-mark">1972 – ∞</div>
+
+    <p class="tribute-message">
+      Your voice became a part of our memories,<br>
+      and your music will continue to live beyond time.
+    </p>
+
+
+    <section class="magazine-intro" aria-labelledby="magazineIntroTitle">
+      <div class="magazine-intro-rule" aria-hidden="true"></div>
+      <p class="magazine-intro-kicker">A small collection of memories</p>
+      <h2 id="magazineIntroTitle">About Eucalyptus</h2>
+      <p>
+        A fan-made digital tribute to Zubeen Garg, bringing together memories, words, artworks and reflections.
+
+        <br>Published in association with the Department of Political Science, Jawaharlal Nehru College (Autonomous), Boko.
+      </p>
+      <p class="magazine-intro-note">
+        Turn the page and take a quiet journey through the collection.
+      </p>
+    </section>
+
+    <!-- Magazine cover -->
+    <button class="magazine-cover-button"
+            id="enterMagazine"
+            type="button"
+            aria-label="Open Eucalyptus magazine">
+
+      <div class="cover-shadow">
+        <div class="cover-frame">
+          <img
+            src="assets/magazine/page-01.webp"
+            alt="Eucalyptus magazine — first page"
+            class="cover-image">
+        </div>
+      </div>
+
+      <div class="cover-caption">
+        <span class="cover-caption-title">Eucalyptus</span>
+        <span class="cover-caption-action">
+          Tap the cover to read
+          <span aria-hidden="true">→</span>
+        </span>
+      </div>
+
+    </button>
+
+  </section>
+
+
+  <!-- =========================
+       MAGAZINE PRELOADER
+  ========================== -->
+  <div class="magazine-preloader" id="magazinePreloader" aria-hidden="true">
+    <div class="preloader-card">
+      <div class="preloader-mark">E</div>
+      <div class="preloader-title">Eucalyptus</div>
+      <div class="preloader-subtitle">Preparing the magazine</div>
+      <div class="preloader-progress"><span id="preloaderBar"></span></div>
+      <div class="preloader-count" id="preloaderCount">0 / 75</div>
+    </div>
+  </div>
+
+  <!-- =========================
+       PDF-LIKE VIEWER
+  ========================== -->
+  <section class="viewer"
+           id="viewer"
+           aria-label="Eucalyptus magazine">
+
+    <header class="toolbar">
+
+      <button class="toolbar-button close-button"
+              id="closeViewer"
+              type="button"
+              aria-label="Close magazine">
+        ×
+      </button>
+
+      <div class="document-title">
+        <strong>Eucalyptus</strong>
+        <span>First Edition</span>
+      </div>
+
+      <div class="toolbar-actions">
+
+        <button class="toolbar-button"
+                id="zoomOut"
+                type="button"
+                aria-label="Zoom out">−</button>
+
+        <span class="zoom-label"
+              id="zoomLabel">100%</span>
+
+        <button class="toolbar-button"
+                id="zoomIn"
+                type="button"
+                aria-label="Zoom in">+</button>
+
+        <button class="toolbar-button download-button"
+                id="downloadMagazine"
+                type="button"
+                aria-label="Download magazine as PDF"
+                title="Download magazine as PDF">
+          <span class="download-icon" aria-hidden="true">↓</span>
+        </button>
+
+      </div>
+    </header>
+
+
+    <main class="pdf-area" id="pdfArea">
+      <div class="pages" id="pages"></div>
+    </main>
+
+
+    <div class="page-control">
+
+      <button id="previousPage"
+              type="button"
+              aria-label="Previous page">‹</button>
+
+      <div class="page-input-wrap">
+        <input id="pageInput"
+               type="number"
+               min="1"
+               max="75"
+               value="1"
+               aria-label="Page number">
+        <span>/ 75</span>
+      </div>
+
+      <button id="nextPage"
+              type="button"
+              aria-label="Next page">›</button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       REVIEWS
+  ========================== -->
+  <section class="reviews-section" id="reviews">
+
+    <div class="review-heading-decoration">
+      <span>✦</span>
+      <span>REFLECTIONS</span>
+      <span>✦</span>
+    </div>
+
+    <div class="section-heading">
+      <h2>Share your thoughts</h2>
+      <p>
+        Every page carries a memory. Leave a few words
+        about your experience with Eucalyptus.
+      </p>
+    </div>
+
+    <div class="reviews-wrap">
+
+      <div id="reviewsList" class="reviews-list is-loading">
+        <div class="review-state review-loading-state">
+          <span class="inline-spinner" aria-hidden="true"></span>
+          <span>Loading reflections…</span>
+        </div>
+      </div>
+
+      <div class="review-actions">
+        <a class="view-all-reviews" id="viewAllReviews" href="review.html" hidden>
+          <span>View all reviews</span>
+          <span aria-hidden="true">→</span>
+        </a>
+
+        <button class="share-thoughts"
+                id="addReview"
+                type="button">
+          <span class="share-icon">+</span>
+          <span class="share-label">Share your thoughts</span>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+
+  <footer>
+    <p>Eucalyptus · First Edition</p>
+    <p>Created as a tribute to Zubeen Garg.</p>
+
+  </footer>
+
+
+  <!-- =========================
+       REVIEW MODAL
+  ========================== -->
+  <div class="modal"
+       id="reviewModal"
+       aria-hidden="true">
+
+    <div class="modal-backdrop"
+         data-close-review></div>
+
+    <div class="modal-card"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="reviewTitle">
+
+      <button class="modal-close"
+              id="closeReview"
+              type="button"
+              aria-label="Close">×</button>
+
+      <div class="modal-ornament">✦</div>
+
+      <h2 id="reviewTitle">Share your thoughts</h2>
+
+      <p class="modal-intro">
+        Tell us what you felt while going through Eucalyptus.
+      </p>
+
+      <div class="review-submit-overlay" id="reviewSubmitOverlay" aria-hidden="true">
+        <div class="submit-spinner" aria-hidden="true"></div>
+        <strong id="reviewSubmitTitle">Publishing your reflection…</strong>
+        <span id="reviewSubmitText">Please wait a moment.</span>
+      </div>
+
+      <form id="reviewForm">
+
+        <label>
+          Name
+          <input name="name"
+                 type="text"
+                 maxlength="60"
+                 required
+                 placeholder="Your name">
+        </label>
+
+        <label>
+          Rating
+
+          <span class="rating-input"
+                id="ratingInput">
+            <button type="button" data-rating="1">★</button>
+            <button type="button" data-rating="2">★</button>
+            <button type="button" data-rating="3">★</button>
+            <button type="button" data-rating="4">★</button>
+            <button type="button" data-rating="5">★</button>
+          </span>
+
+          <input id="ratingValue"
+                 name="rating"
+                 type="hidden"
+                 value="5">
+        </label>
+
+        <label>
+          Your review
+          <textarea name="review"
+                    maxlength="600"
+                    rows="5"
+                    required
+                    placeholder="Write something about the magazine…"></textarea>
+        </label>
+
+        <button class="submit-review"
+                type="submit">
+          Publish review
+        </button>
+
+        <p class="form-message"
+           id="formMessage"></p>
+
+      </form>
+    </div>
+  </div>
+
+
+  <script src="libs/eucalyptus-pdf.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
